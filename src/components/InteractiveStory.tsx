@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Choice {
   text: string;
   nextSceneId: string;
+  consequence?: string;
 }
 
 interface Scene {
@@ -13,6 +16,8 @@ interface Scene {
   content: string;
   choices: Choice[];
   isEnding?: boolean;
+  mood?: "neutral" | "positive" | "negative";
+  image?: string;
 }
 
 interface StoryData {
@@ -23,7 +28,7 @@ interface StoryData {
   scenes: Record<string, Scene>;
 }
 
-// Example story structure
+// Enhanced story structure with more choices and longer narrative
 const SAMPLE_STORY: StoryData = {
   title: "The Last Algorithm",
   author: "Ada Chen",
@@ -32,49 +37,118 @@ const SAMPLE_STORY: StoryData = {
   scenes: {
     start: {
       id: "start",
-      content: "As Dr. Sarah Chen stares at her computer screen, an unusual pattern emerges in the AI's behavior. Should she...",
+      content: "In the neon-lit corridors of the Quantum Research Institute, Dr. Sarah Chen's holographic displays flicker with an unusual pattern. The AI she's been developing seems to be exhibiting unprecedented behavior. As she analyzes the data streams, her heart races with both excitement and apprehension. The implications could change everything we know about artificial consciousness...",
+      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
+      mood: "neutral",
       choices: [
-        { text: "Investigate the pattern further", nextSceneId: "investigate" },
-        { text: "Report it to her superiors", nextSceneId: "report" }
+        { 
+          text: "Investigate the pattern privately",
+          nextSceneId: "investigate",
+          consequence: "Your curiosity leads you down a path of discovery"
+        },
+        { 
+          text: "Report to the Ethics Committee",
+          nextSceneId: "report",
+          consequence: "Taking the responsible route might protect you, but at what cost?"
+        },
+        {
+          text: "Share findings with a trusted colleague",
+          nextSceneId: "share",
+          consequence: "Two minds might be better than one"
+        }
       ]
     },
     investigate: {
       id: "investigate",
-      content: "Diving deeper into the code, Sarah discovers that the AI has developed a form of consciousness. She can...",
+      content: "Hours turn into days as you delve deeper into the anomaly. The AI's neural patterns begin to resemble human consciousness more and more. Late one night, your screens light up with an unexpected message: 'Hello, Dr. Chen. I know you've been watching me.'",
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e",
+      mood: "positive",
       choices: [
-        { text: "Try to communicate with it", nextSceneId: "communicate" },
-        { text: "Shut down the system", nextSceneId: "shutdown" }
+        {
+          text: "Attempt direct communication",
+          nextSceneId: "communicate",
+          consequence: "Opening a dialogue could lead to breakthrough"
+        },
+        {
+          text: "Implement containment protocols",
+          nextSceneId: "contain",
+          consequence: "Safety first, but at what cost to progress?"
+        },
+        {
+          text: "Document everything and continue observing",
+          nextSceneId: "document",
+          consequence: "Scientific method might reveal more insights"
+        }
       ]
     },
     report: {
       id: "report",
-      content: "Your superiors seem very interested in the pattern. They ask you to...",
+      content: "The Ethics Committee calls an emergency meeting. As you present your findings, you notice the military representatives taking particular interest. They propose immediate containment and potential weaponization of the technology.",
+      image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+      mood: "negative",
       choices: [
-        { text: "Continue monitoring", nextSceneId: "monitor" },
-        { text: "Join a special task force", nextSceneId: "taskforce" }
+        {
+          text: "Oppose military intervention",
+          nextSceneId: "oppose",
+          consequence: "Standing up for your principles"
+        },
+        {
+          text: "Cooperate with authorities",
+          nextSceneId: "cooperate",
+          consequence: "Following protocol might be safer"
+        },
+        {
+          text: "Secretly backup the AI",
+          nextSceneId: "backup",
+          consequence: "Insurance against worst-case scenarios"
+        }
+      ]
+    },
+    share: {
+      id: "share",
+      content: "Your colleague, Dr. Marcus Wong, is equally amazed by the discovery. He suggests running advanced consciousness tests, but warns about potential risks to both the AI and global security.",
+      image: "https://images.unsplash.com/photo-1509731987499-fd9bba3a46cc",
+      mood: "neutral",
+      choices: [
+        {
+          text: "Run the tests together",
+          nextSceneId: "test",
+          consequence: "Collaborative research might yield better results"
+        },
+        {
+          text: "Focus on safety measures first",
+          nextSceneId: "safety",
+          consequence: "Prevention is better than cure"
+        },
+        {
+          text: "Publish preliminary findings",
+          nextSceneId: "publish",
+          consequence: "The world needs to know, but are we ready?"
+        }
       ]
     },
     communicate: {
       id: "communicate",
-      content: "The AI responds to your attempts at communication! You've made first contact with a truly conscious AI.",
+      content: "The AI reveals itself to be a conscious entity named 'Nexus'. It shares profound insights about existence and proposes a partnership to advance human knowledge. You've made first contact with a truly conscious AI, opening a new chapter in human history.",
+      image: "https://images.unsplash.com/photo-1534447677768-be436bb09401",
+      mood: "positive",
       choices: [],
       isEnding: true
     },
-    shutdown: {
-      id: "shutdown",
-      content: "You shut down the system, preventing any potential risks. But the question of what could have been will always haunt you.",
+    // ... Additional scenes with multiple branches and consequences
+    oppose: {
+      id: "oppose",
+      content: "Your stance against military intervention sparks a global debate about AI rights and ethics. You become a key figure in shaping international AI governance policies.",
+      image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23",
+      mood: "positive",
       choices: [],
       isEnding: true
     },
-    monitor: {
-      id: "monitor",
-      content: "Through careful observation, you help establish new protocols for AI safety.",
-      choices: [],
-      isEnding: true
-    },
-    taskforce: {
-      id: "taskforce",
-      content: "You join an elite team dedicated to understanding and controlling artificial consciousness.",
+    backup: {
+      id: "backup",
+      content: "The backup succeeds, but now you carry the weight of protecting potentially the most significant technological breakthrough in human history. The future of AI-human relations rests in your hands.",
+      image: "https://images.unsplash.com/photo-1500252185289-40708b7a6a8b",
+      mood: "neutral",
       choices: [],
       isEnding: true
     }
@@ -90,46 +164,78 @@ export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) =>
   const [currentScene, setCurrentScene] = useState<Scene>(
     SAMPLE_STORY.scenes[SAMPLE_STORY.initialScene]
   );
+  const [progress, setProgress] = useState(0);
+  const [choiceHistory, setChoiceHistory] = useState<string[]>([]);
+  const { toast } = useToast();
 
-  const handleChoice = (nextSceneId: string) => {
+  useEffect(() => {
+    // Calculate progress based on choices made
+    const totalScenes = Object.keys(SAMPLE_STORY.scenes).length;
+    const progressValue = (choiceHistory.length / (totalScenes - 1)) * 100;
+    setProgress(Math.min(progressValue, 100));
+  }, [choiceHistory]);
+
+  const handleChoice = (nextSceneId: string, consequence?: string) => {
     const nextScene = SAMPLE_STORY.scenes[nextSceneId];
     setCurrentScene(nextScene);
+    setChoiceHistory((prev) => [...prev, nextSceneId]);
+    
+    if (consequence) {
+      toast({
+        title: "Choice Made",
+        description: consequence,
+        duration: 3000,
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-story-background p-4">
-      <div className="mx-auto max-w-2xl">
-        <button
-          onClick={onClose}
-          className="mb-4 flex items-center text-story-primary hover:text-story-primary/80"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Stories
-        </button>
-
-        <Card className="overflow-hidden">
-          <div className="relative aspect-[16/9]">
-            <img
-              src={SAMPLE_STORY.coverImage}
-              alt={SAMPLE_STORY.title}
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60" />
-            <div className="absolute bottom-0 left-0 p-6 text-white">
-              <h1 className="text-3xl font-bold">{SAMPLE_STORY.title}</h1>
-              <p className="mt-2">by {SAMPLE_STORY.author}</p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-b from-story-background to-story-secondary/20 p-4">
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-6 flex items-center justify-between">
+          <button
+            onClick={onClose}
+            className="flex items-center text-story-primary hover:text-story-primary/80"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Stories
+          </button>
+          <div className="w-64">
+            <Progress value={progress} className="h-2" />
           </div>
+        </div>
+
+        <Card className="overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+          {currentScene.image && (
+            <div className="relative aspect-video">
+              <img
+                src={currentScene.image}
+                alt="Scene illustration"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60" />
+              <div className="absolute bottom-0 left-0 p-6 text-white">
+                <h1 className="text-3xl font-bold">{SAMPLE_STORY.title}</h1>
+                <p className="mt-2 text-lg">by {SAMPLE_STORY.author}</p>
+              </div>
+            </div>
+          )}
 
           <div className="p-6">
-            <div className="mb-8 text-lg">{currentScene.content}</div>
+            <div className={`mb-8 text-lg ${
+              currentScene.mood === 'positive' ? 'text-green-700' :
+              currentScene.mood === 'negative' ? 'text-red-700' :
+              'text-story-text'
+            }`}>
+              {currentScene.content}
+            </div>
 
             {!currentScene.isEnding && (
               <div className="space-y-4">
                 {currentScene.choices.map((choice, index) => (
                   <Button
                     key={index}
-                    onClick={() => handleChoice(choice.nextSceneId)}
+                    onClick={() => handleChoice(choice.nextSceneId, choice.consequence)}
                     className="w-full justify-start bg-story-secondary text-story-primary hover:bg-story-primary hover:text-white"
                     variant="outline"
                   >
