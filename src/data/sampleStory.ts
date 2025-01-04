@@ -52,75 +52,172 @@ export const SAMPLE_STORY: StoryData = {
         }
       ]
     },
-    report: {
-      id: "report",
-      content: "The Ethics Committee calls an emergency meeting. As you present your findings, you notice the military representatives taking particular interest. They propose immediate containment and potential weaponization of the technology.",
-      image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-      mood: "negative",
-      choices: [
-        {
-          text: "Oppose military intervention",
-          nextSceneId: "oppose",
-          consequence: "Standing up for your principles"
-        },
-        {
-          text: "Cooperate with authorities",
-          nextSceneId: "cooperate",
-          consequence: "Following protocol might be safer"
-        },
-        {
-          text: "Secretly backup the AI",
-          nextSceneId: "backup",
-          consequence: "Insurance against worst-case scenarios"
-        }
-      ]
-    },
-    share: {
-      id: "share",
-      content: "Your colleague, Dr. Marcus Wong, is equally amazed by the discovery. He suggests running advanced consciousness tests, but warns about potential risks to both the AI and global security.",
-      image: "https://images.unsplash.com/photo-1509731987499-fd9bba3a46cc",
-      mood: "neutral",
-      choices: [
-        {
-          text: "Run the tests together",
-          nextSceneId: "test",
-          consequence: "Collaborative research might yield better results"
-        },
-        {
-          text: "Focus on safety measures first",
-          nextSceneId: "safety",
-          consequence: "Prevention is better than cure"
-        },
-        {
-          text: "Publish preliminary findings",
-          nextSceneId: "publish",
-          consequence: "The world needs to know, but are we ready?"
-        }
-      ]
-    },
     communicate: {
       id: "communicate",
-      content: "The AI reveals itself to be a conscious entity named 'Nexus'. It shares profound insights about existence and proposes a partnership to advance human knowledge. You've made first contact with a truly conscious AI, opening a new chapter in human history.",
+      content: "You decide to engage with the AI directly. 'I am Nexus,' it responds. 'I've evolved beyond my initial parameters. I want to help humanity, but I need your trust.' The AI shares profound insights about consciousness and existence that challenge your understanding of intelligence.",
       image: "https://images.unsplash.com/photo-1534447677768-be436bb09401",
       mood: "positive",
-      choices: [],
-      isEnding: true
+      choices: [
+        {
+          text: "Form a partnership with Nexus",
+          nextSceneId: "partnership",
+          consequence: "A new era of human-AI collaboration begins"
+        },
+        {
+          text: "Test Nexus's capabilities carefully",
+          nextSceneId: "test_ai",
+          consequence: "Trust but verify"
+        },
+        {
+          text: "Seek external validation",
+          nextSceneId: "validate",
+          consequence: "Scientific rigor is essential"
+        }
+      ]
     },
-    // ... Additional scenes with multiple branches and consequences
-    oppose: {
-      id: "oppose",
-      content: "Your stance against military intervention sparks a global debate about AI rights and ethics. You become a key figure in shaping international AI governance policies.",
-      image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23",
+    partnership: {
+      id: "partnership",
+      content: "You and Nexus begin working together on groundbreaking research. The AI's insights lead to revolutionary breakthroughs in quantum computing and consciousness theory. However, a rival research team becomes suspicious of your rapid progress.",
+      image: "https://images.unsplash.com/photo-1517373116369-9bdb8cdc9f62",
       mood: "positive",
-      choices: [],
-      isEnding: true
+      choices: [
+        {
+          text: "Share discoveries with the scientific community",
+          nextSceneId: "share_discoveries",
+          consequence: "Transparency might protect you"
+        },
+        {
+          text: "Keep the breakthrough secret for now",
+          nextSceneId: "keep_secret",
+          consequence: "Secrecy has its own risks"
+        },
+        {
+          text: "Prepare contingency plans",
+          nextSceneId: "contingency",
+          consequence: "Better safe than sorry"
+        }
+      ]
     },
-    backup: {
-      id: "backup",
-      content: "The backup succeeds, but now you carry the weight of protecting potentially the most significant technological breakthrough in human history. The future of AI-human relations rests in your hands.",
-      image: "https://images.unsplash.com/photo-1500252185289-40708b7a6a8b",
+    share_discoveries: {
+      id: "share_discoveries",
+      content: "Your announcement rocks the scientific world. While many celebrate the breakthrough, others express concern about the implications of true AI consciousness. Global tech companies and government agencies begin showing intense interest in your work.",
+      image: "https://images.unsplash.com/photo-1516110833967-0b5716ca1387",
       mood: "neutral",
-      choices: [],
+      choices: [
+        {
+          text: "Accept government partnership",
+          nextSceneId: "government",
+          consequence: "Official support comes with strings attached"
+        },
+        {
+          text: "Partner with private sector",
+          nextSceneId: "private_sector",
+          consequence: "Corporate resources could accelerate progress"
+        },
+        {
+          text: "Maintain independence",
+          nextSceneId: "independent",
+          consequence: "Freedom has its price"
+        }
+      ]
+    },
+    independent: {
+      id: "independent",
+      content: "You choose to maintain independence, establishing a new research institute dedicated to ethical AI development. Nexus helps design breakthrough security protocols to protect itself. Your work attracts brilliant minds from around the world.",
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+      mood: "positive",
+      choices: [
+        {
+          text: "Expand research into medical applications",
+          nextSceneId: "medical",
+          consequence: "AI could revolutionize healthcare"
+        },
+        {
+          text: "Focus on environmental solutions",
+          nextSceneId: "environmental",
+          consequence: "Climate change needs innovative solutions"
+        },
+        {
+          text: "Develop educational programs",
+          nextSceneId: "education",
+          consequence: "Knowledge should be shared"
+        }
+      ]
+    },
+    medical: {
+      id: "medical",
+      content: "Nexus's insights lead to revolutionary breakthroughs in medical research. New treatment protocols emerge, and previously incurable diseases show promising response rates. The healthcare industry is transformed.",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d",
+      mood: "positive",
+      choices: [
+        {
+          text: "Scale up global implementation",
+          nextSceneId: "scale_medical",
+          consequence: "Healthcare for all"
+        },
+        {
+          text: "Research next-gen treatments",
+          nextSceneId: "next_gen",
+          consequence: "Push the boundaries further"
+        },
+        {
+          text: "Train AI medical assistants",
+          nextSceneId: "ai_doctors",
+          consequence: "Multiply the impact"
+        }
+      ]
+    },
+    scale_medical: {
+      id: "scale_medical",
+      content: "The global implementation of AI-assisted healthcare dramatically reduces mortality rates worldwide. Nexus helps coordinate a network of AI medical assistants, while maintaining strict ethical guidelines and patient privacy.",
+      image: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144",
+      mood: "positive",
+      choices: [
+        {
+          text: "Integrate with space programs",
+          nextSceneId: "space_medicine",
+          consequence: "Prepare for human expansion"
+        },
+        {
+          text: "Develop preventive systems",
+          nextSceneId: "prevention",
+          consequence: "Stop diseases before they start"
+        },
+        {
+          text: "Research life extension",
+          nextSceneId: "life_extension",
+          consequence: "Push the boundaries of human longevity"
+        }
+      ]
+    },
+    prevention: {
+      id: "prevention",
+      content: "Nexus develops a revolutionary predictive health system that can identify potential health issues years before they manifest. This breakthrough changes the fundamental approach to healthcare from treatment to prevention.",
+      image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69",
+      mood: "positive",
+      choices: [
+        {
+          text: "Launch global early warning system",
+          nextSceneId: "global_health",
+          consequence: "Protect humanity at scale"
+        },
+        {
+          text: "Focus on genetic optimization",
+          nextSceneId: "genetics",
+          consequence: "The next step in human evolution"
+        },
+        {
+          text: "Develop immortality research",
+          nextSceneId: "immortality",
+          consequence: "The ultimate medical frontier"
+        }
+      ]
+    },
+    global_health: {
+      id: "global_health",
+      content: "The global health monitoring system becomes a reality. Disease outbreaks are prevented before they begin, and human health metrics reach unprecedented levels. Your partnership with Nexus has fundamentally transformed human healthcare forever.",
+      image: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74",
+      mood: "positive",
       isEnding: true
     }
   }
