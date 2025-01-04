@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { GenreSection } from "@/components/GenreSection";
+import { InteractiveStory } from "@/components/InteractiveStory";
 import { useToast } from "@/components/ui/use-toast";
 
 // Mock data - in a real app this would come from an API
@@ -152,24 +153,36 @@ const GENRES = ["Fantasy", "Science Fiction", "Romance", "Mystery"];
 const Index = () => {
   const { toast } = useToast();
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [selectedStoryId, setSelectedStoryId] = useState<number | null>(null);
 
   const handleStoryClick = (id: number) => {
-    // In a real app, this would navigate to the story page
-    toast({
-      title: "Coming Soon!",
-      description: "Story reading feature will be available in the next update.",
-    });
+    setSelectedStoryId(id);
   };
+
+  const handleCloseStory = () => {
+    setSelectedStoryId(null);
+  };
+
+  if (selectedStoryId !== null) {
+    return <InteractiveStory storyId={selectedStoryId} onClose={handleCloseStory} />;
+  }
 
   return (
     <div className="min-h-screen animate-fade-in bg-story-background">
       <div className="container py-8">
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-story-text">Discover Amazing Stories</h1>
-          <p className="mt-2 text-gray-600">Explore worlds of imagination and adventure</p>
+          <h1 className="text-4xl font-bold text-story-text">
+            Discover Amazing Stories
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Explore worlds of imagination and adventure
+          </p>
         </header>
 
-        <FeaturedStory {...FEATURED_STORY} onClick={() => handleStoryClick(FEATURED_STORY.id)} />
+        <FeaturedStory
+          {...FEATURED_STORY}
+          onClick={() => handleStoryClick(FEATURED_STORY.id)}
+        />
 
         <div className="my-8 flex gap-4 overflow-x-auto pb-2">
           {GENRES.map((genre) => (
