@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { StoryHeader } from "./story/StoryHeader";
 import { StoryScene } from "./story/StoryScene";
 import { StoryData } from "@/types/story";
-import { SAMPLE_STORY } from "@/data/sampleStory";
+import { FANTASY_STORY, SCIFI_STORY, ROMANCE_STORY, MYSTERY_STORY } from "@/data/stories";
 
 interface InteractiveStoryProps {
   storyId: number;
@@ -11,11 +12,39 @@ interface InteractiveStoryProps {
 }
 
 export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) => {
+  const getStoryData = (id: number): StoryData => {
+    switch (id) {
+      case 1:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+        return SCIFI_STORY;
+      case 2:
+      case 3:
+      case 4:
+        return FANTASY_STORY;
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+        return ROMANCE_STORY;
+      case 13:
+      case 14:
+      case 15:
+      case 16:
+        return MYSTERY_STORY;
+      default:
+        return SCIFI_STORY;
+    }
+  };
+
+  const storyData = getStoryData(storyId);
   console.log("Story ID:", storyId);
-  console.log("Initial Scene:", SAMPLE_STORY.initialScene);
+  console.log("Initial Scene:", storyData.initialScene);
   
   const [currentScene, setCurrentScene] = useState(() => {
-    const scene = SAMPLE_STORY.scenes[SAMPLE_STORY.initialScene];
+    const scene = storyData.scenes[storyData.initialScene];
     console.log("Initial scene data:", scene);
     return scene;
   });
@@ -25,14 +54,14 @@ export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) =>
   const { toast } = useToast();
 
   useEffect(() => {
-    const totalScenes = Object.keys(SAMPLE_STORY.scenes).length;
+    const totalScenes = Object.keys(storyData.scenes).length;
     const progressValue = (choiceHistory.length / (totalScenes - 1)) * 100;
     setProgress(Math.min(progressValue, 100));
-  }, [choiceHistory]);
+  }, [choiceHistory, storyData.scenes]);
 
   const handleChoice = (nextSceneId: string, consequence?: string) => {
     console.log("Handling choice:", nextSceneId);
-    const nextScene = SAMPLE_STORY.scenes[nextSceneId];
+    const nextScene = storyData.scenes[nextSceneId];
     
     if (!nextScene) {
       console.error("Scene not found:", nextSceneId);
@@ -66,8 +95,8 @@ export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) =>
         <StoryHeader onClose={onClose} progress={progress} />
         <StoryScene
           scene={currentScene}
-          storyTitle={SAMPLE_STORY.title}
-          storyAuthor={SAMPLE_STORY.author}
+          storyTitle={storyData.title}
+          storyAuthor={storyData.author}
           onChoice={handleChoice}
           onClose={onClose}
         />
