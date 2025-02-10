@@ -28,7 +28,7 @@ export const FANTASY_STORY: StoryData = {
     touch: {
       id: "touch",
       content: "As your fingers brush the crystal's surface, magical energy surges through your body, awakening dormant powers...",
-      image: "https://images.unsplash.com/photo-1534447677768-be436bb09401",
+      image: "public/lovable-uploads/62fd4253-a317-4e64-adb4-710e37ce721b.png",
       mood: "positive",
       choices: [
         {
@@ -41,7 +41,7 @@ export const FANTASY_STORY: StoryData = {
     ending: {
       id: "ending",
       content: "You become the new Crystal Guardian, protector of the realm's magic.",
-      image: "https://images.unsplash.com/photo-1500252185289-40708b7a6a8b",
+      image: "public/lovable-uploads/9ac2a892-f829-4cfc-85c3-72da99d0ae8c.png",
       mood: "positive",
       isEnding: true,
       choices: []
