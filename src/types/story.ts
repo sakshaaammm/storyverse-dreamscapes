@@ -1,3 +1,4 @@
+
 export interface Choice {
   text: string;
   nextSceneId: string;

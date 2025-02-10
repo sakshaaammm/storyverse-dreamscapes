@@ -1,3 +1,4 @@
+
 import { StoryData } from "@/types/story";
 
 export const SAMPLE_STORY: StoryData = {
@@ -218,7 +219,8 @@ export const SAMPLE_STORY: StoryData = {
       content: "The global health monitoring system becomes a reality. Disease outbreaks are prevented before they begin, and human health metrics reach unprecedented levels. Your partnership with Nexus has fundamentally transformed human healthcare forever.",
       image: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74",
       mood: "positive",
-      isEnding: true
+      isEnding: true,
+      choices: [] // Add empty choices array to satisfy type requirements
     }
   }
 };
