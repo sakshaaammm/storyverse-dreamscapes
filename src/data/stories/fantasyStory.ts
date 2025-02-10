@@ -38,6 +38,19 @@ export const FANTASY_STORY: StoryData = {
         }
       ]
     },
+    elders: {
+      id: "elders",
+      content: "The wise elders gather around you, their eyes glowing with ancient wisdom. They speak of a prophecy about a chosen one who would awaken the crystal's true power...",
+      image: "public/lovable-uploads/9ac2a892-f829-4cfc-85c3-72da99d0ae8c.png",
+      mood: "neutral",
+      choices: [
+        {
+          text: "Accept your destiny",
+          nextSceneId: "ending",
+          consequence: "The prophecy unfolds"
+        }
+      ]
+    },
     ending: {
       id: "ending",
       content: "You become the new Crystal Guardian, protector of the realm's magic.",
