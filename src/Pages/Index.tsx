@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 // Mock data - limited to 10 stories total
 const FEATURED_STORY = {
-  id: 1,
+  id: 11, // Changed to unique ID 11 for The Last Algorithm
   title: "The Last Algorithm",
   author: "Ada Chen",
   description: "In a world where artificial intelligence has evolved beyond human comprehension, Dr. Sarah Chen discovers a hidden pattern that could change everything...",

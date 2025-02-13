@@ -15,6 +15,12 @@ export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) =>
   const getStoryData = (id: number): StoryData => {
     // Each ID should map to its own unique story
     switch (id) {
+      case 11: // The Last Algorithm (Featured Story)
+        return {
+          ...SCIFI_STORY,
+          title: "The Last Algorithm",
+          author: "Ada Chen"
+        };
       case 1:
         return {
           ...FANTASY_STORY,
