@@ -15,24 +15,18 @@ export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) =>
   const getStoryData = (id: number): StoryData => {
     switch (id) {
       case 1:
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-        return SCIFI_STORY;
       case 2:
       case 3:
-      case 4:
         return FANTASY_STORY;
+      case 4:
+      case 5:
+      case 6:
+        return SCIFI_STORY;
+      case 7:
+      case 8:
+        return ROMANCE_STORY;
       case 9:
       case 10:
-      case 11:
-      case 12:
-        return ROMANCE_STORY;
-      case 13:
-      case 14:
-      case 15:
-      case 16:
         return MYSTERY_STORY;
       default:
         return SCIFI_STORY;
