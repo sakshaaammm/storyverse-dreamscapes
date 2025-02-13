@@ -13,28 +13,77 @@ interface InteractiveStoryProps {
 
 export const InteractiveStory = ({ storyId, onClose }: InteractiveStoryProps) => {
   const getStoryData = (id: number): StoryData => {
+    // Each ID should map to its own unique story
     switch (id) {
       case 1:
+        return {
+          ...FANTASY_STORY,
+          title: "Dragon's Dawn",
+          author: "Richard Storm"
+        };
       case 2:
+        return {
+          ...FANTASY_STORY,
+          title: "The Crystal Kingdom",
+          author: "Elena Rivers"
+        };
       case 3:
-        return FANTASY_STORY;
+        return {
+          ...FANTASY_STORY,
+          title: "Whispers in the Wind",
+          author: "Marcus Blake"
+        };
       case 4:
+        return {
+          ...SCIFI_STORY,
+          title: "Neural Network",
+          author: "Alex Chen"
+        };
       case 5:
+        return {
+          ...SCIFI_STORY,
+          title: "Quantum Dreams",
+          author: "Maya Patel"
+        };
       case 6:
-        return SCIFI_STORY;
+        return {
+          ...SCIFI_STORY,
+          title: "Digital Horizon",
+          author: "Sarah Kim"
+        };
       case 7:
+        return {
+          ...ROMANCE_STORY,
+          title: "Midnight in Paris",
+          author: "Sophie Martin"
+        };
       case 8:
-        return ROMANCE_STORY;
+        return {
+          ...ROMANCE_STORY,
+          title: "Love in Venice",
+          author: "Isabella Romano"
+        };
       case 9:
+        return {
+          ...MYSTERY_STORY,
+          title: "The Detective's Last Case",
+          author: "James Morrison"
+        };
       case 10:
-        return MYSTERY_STORY;
+        return {
+          ...MYSTERY_STORY,
+          title: "Silent Witness",
+          author: "Rachel Chen"
+        };
       default:
-        return SCIFI_STORY;
+        console.error("Unknown story ID:", id);
+        return FANTASY_STORY;
     }
   };
 
   const storyData = getStoryData(storyId);
   console.log("Story ID:", storyId);
+  console.log("Story Title:", storyData.title);
   console.log("Initial Scene:", storyData.initialScene);
   
   const [currentScene, setCurrentScene] = useState(() => {
