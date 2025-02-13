@@ -1,26 +1,27 @@
+
 import { useState } from "react";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { GenreSection } from "@/components/GenreSection";
 import { InteractiveStory } from "@/components/InteractiveStory";
 import { useToast } from "@/components/ui/use-toast";
 
-// Mock data - in a real app this would come from an API
+// Mock data - limited to 10 stories total
 const FEATURED_STORY = {
   id: 1,
   title: "The Last Algorithm",
   author: "Ada Chen",
-  description: "In a world where artificial intelligence has evolved beyond human comprehension, Dr. Sarah Chen discovers a hidden pattern that could change everything. As she delves deeper into the mystery, she realizes that the very fabric of reality might be at stake...",
+  description: "In a world where artificial intelligence has evolved beyond human comprehension, Dr. Sarah Chen discovers a hidden pattern that could change everything...",
   coverImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
 };
 
 const MOCK_STORIES = [
-  // Fantasy Stories
+  // Fantasy Stories (3)
   {
     id: 1,
-    title: "Whispers in the Wind",
-    author: "Marcus Blake",
-    description: "A tale of mystery and magic in a small coastal town.",
-    coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23",
+    title: "Dragon's Dawn",
+    author: "Richard Storm",
+    description: "The last dragon rider must save her world from darkness.",
+    coverImage: "https://images.unsplash.com/photo-1500252185289-40708b7a6a8b",
     genre: "Fantasy",
   },
   {
@@ -33,23 +34,15 @@ const MOCK_STORIES = [
   },
   {
     id: 3,
-    title: "Dragon's Dawn",
-    author: "Richard Storm",
-    description: "The last dragon rider must save her world from darkness.",
-    coverImage: "https://images.unsplash.com/photo-1500252185289-40708b7a6a8b",
+    title: "Whispers in the Wind",
+    author: "Marcus Blake",
+    description: "A tale of mystery and magic in a small coastal town.",
+    coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23",
     genre: "Fantasy",
   },
+  // Science Fiction Stories (3)
   {
     id: 4,
-    title: "The Enchanted Forest",
-    author: "Luna Silver",
-    description: "A magical journey through an ancient forest of wonders.",
-    coverImage: "https://images.unsplash.com/photo-1511497584788-876760111969",
-    genre: "Fantasy",
-  },
-  // Science Fiction Stories
-  {
-    id: 5,
     title: "Neural Network",
     author: "Alex Chen",
     description: "A cybernetic detective uncovers a conspiracy in Neo Tokyo.",
@@ -57,7 +50,7 @@ const MOCK_STORIES = [
     genre: "Science Fiction",
   },
   {
-    id: 6,
+    id: 5,
     title: "Quantum Dreams",
     author: "Maya Patel",
     description: "Reality bends as quantum computing reaches new heights.",
@@ -65,24 +58,16 @@ const MOCK_STORIES = [
     genre: "Science Fiction",
   },
   {
-    id: 7,
-    title: "Mars Colony One",
-    author: "James Morrison",
-    description: "The first Mars colonists face unexpected challenges.",
-    coverImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
-    genre: "Science Fiction",
-  },
-  {
-    id: 8,
+    id: 6,
     title: "Digital Horizon",
     author: "Sarah Kim",
     description: "A virtual reality experiment goes terribly wrong.",
     coverImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
     genre: "Science Fiction",
   },
-  // Romance Stories
+  // Romance Stories (2)
   {
-    id: 9,
+    id: 7,
     title: "Midnight in Paris",
     author: "Sophie Martin",
     description: "A romantic journey through time in the city of lights.",
@@ -90,32 +75,16 @@ const MOCK_STORIES = [
     genre: "Romance",
   },
   {
-    id: 10,
+    id: 8,
     title: "Love in Venice",
     author: "Isabella Romano",
     description: "Two hearts meet in the floating city of dreams.",
     coverImage: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9",
     genre: "Romance",
   },
+  // Mystery Stories (2)
   {
-    id: 11,
-    title: "Summer's Promise",
-    author: "Emily Chase",
-    description: "A summer romance that changes everything.",
-    coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    genre: "Romance",
-  },
-  {
-    id: 12,
-    title: "Coffee Shop Love",
-    author: "David Park",
-    description: "Finding love one cup at a time.",
-    coverImage: "https://images.unsplash.com/photo-1445116572660-236099ec97a0",
-    genre: "Romance",
-  },
-  // Mystery Stories
-  {
-    id: 13,
+    id: 9,
     title: "The Detective's Last Case",
     author: "James Morrison",
     description: "A gripping mystery that will keep you guessing until the end.",
@@ -123,29 +92,13 @@ const MOCK_STORIES = [
     genre: "Mystery",
   },
   {
-    id: 14,
+    id: 10,
     title: "Silent Witness",
     author: "Rachel Chen",
     description: "A cold case comes back to haunt a small town.",
     coverImage: "https://images.unsplash.com/photo-1494236536165-dab4d859818b",
     genre: "Mystery",
   },
-  {
-    id: 15,
-    title: "The Forgotten Room",
-    author: "Michael Blake",
-    description: "An old mansion holds deadly secrets.",
-    coverImage: "https://images.unsplash.com/photo-1505159940484-eb2b9f2588e2",
-    genre: "Mystery",
-  },
-  {
-    id: 16,
-    title: "Vanishing Point",
-    author: "Laura Stone",
-    description: "A detective races against time to find missing persons.",
-    coverImage: "https://images.unsplash.com/photo-1519608425089-7f3bfa6f6bb8",
-    genre: "Mystery",
-  }
 ];
 
 const GENRES = ["Fantasy", "Science Fiction", "Romance", "Mystery"];
@@ -168,13 +121,13 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen animate-fade-in bg-story-background">
+    <div className="min-h-screen animate-fade-in bg-black">
       <div className="container py-8">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold text-story-text">
+        <header className="mb-12 text-center">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(155,135,245,0.3)]">
             Discover Amazing Stories
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-4 text-lg text-[#7E69AB]">
             Explore worlds of imagination and adventure
           </p>
         </header>
@@ -184,15 +137,15 @@ const Index = () => {
           onClick={() => handleStoryClick(FEATURED_STORY.id)}
         />
 
-        <div className="my-8 flex gap-4 overflow-x-auto pb-2">
+        <div className="my-8 flex gap-4 overflow-x-auto pb-2 justify-center">
           {GENRES.map((genre) => (
             <button
               key={genre}
               onClick={() => setSelectedGenre(genre)}
-              className={`rounded-full px-6 py-2 text-sm font-medium transition-colors ${
+              className={`rounded-full px-6 py-2 text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
                 selectedGenre === genre
-                  ? "bg-story-primary text-white"
-                  : "bg-story-secondary text-story-primary hover:bg-story-primary/10"
+                  ? "bg-[#9b87f5] text-white shadow-lg shadow-[#9b87f5]/30"
+                  : "bg-[#2A1F3C] text-[#9b87f5] hover:bg-[#9b87f5]/20"
               }`}
             >
               {genre}

@@ -1,3 +1,4 @@
+
 import { StoryCard } from "./StoryCard";
 
 interface Story {
@@ -18,7 +19,7 @@ interface GenreSectionProps {
 export const GenreSection = ({ title, stories, onStoryClick }: GenreSectionProps) => {
   return (
     <section className="py-8">
-      <h2 className="mb-6 text-2xl font-bold text-story-text">{title}</h2>
+      <h2 className="mb-6 text-3xl font-bold bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] bg-clip-text text-transparent">{title}</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {stories.map((story) => (
           <StoryCard
