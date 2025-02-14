@@ -21,7 +21,7 @@ const MOCK_STORIES = [
     title: "Dragon's Dawn",
     author: "Richard Storm",
     description: "In a realm where dragons and humans once coexisted in harmony, darkness threatens to destroy everything. As the last dragon rider, you must forge alliances, uncover ancient secrets, and restore balance to a world on the brink of chaos.",
-    coverImage: "https://images.unsplash.com/photo-1472396965328-142e6e269027",
+    coverImage: "https://images.unsplash.com/photo-1500964757637-c85e8a162699", // Updated to a mystical landscape image
     genre: "Fantasy",
   },
   {
