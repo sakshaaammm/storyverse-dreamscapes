@@ -12,14 +12,7 @@ interface StorySceneProps {
   onClose: () => void;
 }
 
-export const StoryScene = ({ 
-  scene, 
-  storyTitle, 
-  storyAuthor, 
-  onChoice, 
-  onClose 
-}: StorySceneProps) => {
-  // Determine background animation based on scene mood and content
+export const StoryScene = ({ scene, storyTitle, storyAuthor, onChoice, onClose }: StorySceneProps) => {
   const getBackgroundEffects = () => {
     const baseParticles = 50;
     const particles = Array.from({ length: baseParticles }, (_, i) => ({
@@ -58,6 +51,40 @@ export const StoryScene = ({
 
   const backgroundEffects = getBackgroundEffects();
 
+  // Generate 3D stars for choice selection effect
+  const generateStars = () => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      size: Math.random() * 20 + 10,
+      x: Math.random() * window.innerWidth,
+      y: -100,
+      rotation: Math.random() * 360,
+      delay: Math.random() * 0.5,
+    }));
+  };
+
+  // Split text into words for dancing animation
+  const animatedText = (text: string) => {
+    return text.split(' ').map((word, i) => (
+      <motion.span
+        key={i}
+        className="inline-block mx-1"
+        animate={{
+          y: [0, -10, 0],
+          rotate: [-2, 2, -2],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          delay: i * 0.1,
+        }}
+      >
+        {word}
+      </motion.span>
+    ));
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -65,7 +92,47 @@ export const StoryScene = ({
       exit={{ opacity: 0 }}
       className="relative"
     >
-      {/* Animated background particles */}
+      {/* Star effect container */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
+        <AnimatePresence>
+          {scene.choices.map((choice) => (
+            generateStars().map((star) => (
+              <motion.div
+                key={`${choice.nextSceneId}-star-${star.id}`}
+                className="absolute"
+                initial={{ 
+                  x: star.x,
+                  y: star.y,
+                  rotate: star.rotation,
+                  scale: 0
+                }}
+                animate={{
+                  y: window.innerHeight + 100,
+                  rotate: star.rotation + 360,
+                  scale: [0, 1, 0],
+                }}
+                exit={{ scale: 0 }}
+                transition={{
+                  duration: 2,
+                  delay: star.delay,
+                  ease: "easeOut"
+                }}
+              >
+                <div 
+                  className="w-4 h-4 bg-[#9b87f5]"
+                  style={{
+                    clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+                    width: star.size,
+                    height: star.size,
+                  }}
+                />
+              </motion.div>
+            ))
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-b ${backgroundEffects.className} transition-colors duration-1000`} />
         {backgroundEffects.particles.map((particle) => (
@@ -116,19 +183,11 @@ export const StoryScene = ({
                 <div className="absolute bottom-0 left-0 p-6 text-white">
                   <motion.h1 
                     className="text-3xl font-bold text-[#9b87f5] drop-shadow-[0_2px_4px_rgba(155,135,245,0.5)] transform hover:scale-105 transition-transform duration-300"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
                   >
-                    {storyTitle}
+                    {animatedText(storyTitle)}
                   </motion.h1>
-                  <motion.p 
-                    className="mt-2 text-lg text-[#7E69AB] drop-shadow-lg"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                  >
-                    {storyAuthor}
+                  <motion.p className="mt-2 text-lg text-[#7E69AB] drop-shadow-lg">
+                    {animatedText(storyAuthor)}
                   </motion.p>
                 </div>
               </div>
@@ -143,11 +202,8 @@ export const StoryScene = ({
                     ? "text-red-400"
                     : "text-[#7E69AB]"
                 } drop-shadow-lg`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
               >
-                {scene.content}
+                {animatedText(scene.content)}
               </motion.div>
 
               {!scene.isEnding && (
@@ -164,7 +220,7 @@ export const StoryScene = ({
                         className="w-full justify-start bg-black/80 text-[#9b87f5] hover:bg-[#9b87f5] hover:text-white transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#9b87f5]/50 border border-[#9b87f5]/20"
                         variant="outline"
                       >
-                        {choice.text}
+                        {animatedText(choice.text)}
                       </Button>
                     </motion.div>
                   ))}
@@ -178,7 +234,9 @@ export const StoryScene = ({
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                 >
-                  <p className="mb-4 text-xl font-semibold text-[#9b87f5] drop-shadow-lg">The End</p>
+                  <p className="mb-4 text-xl font-semibold text-[#9b87f5] drop-shadow-lg">
+                    {animatedText("The End")}
+                  </p>
                   <Button 
                     onClick={onClose} 
                     variant="default"

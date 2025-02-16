@@ -5,13 +5,15 @@ import { InteractiveStory } from "@/components/InteractiveStory";
 import { useToast } from "@/components/ui/use-toast";
 import { motion, useScroll, useSpring } from "framer-motion";
 
-// Mock data - limited to 10 stories total
 const FEATURED_STORY = {
-  id: 11, // Changed to unique ID 11 for The Last Algorithm
-  title: "The Last Algorithm",
-  author: "Ada Chen",
-  description: "In a world where artificial intelligence has evolved beyond human comprehension, Dr. Sarah Chen discovers a hidden pattern that could change everything...",
-  coverImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
+  id: 10,
+  title: "Silent Witness",
+  author: "Rachel Chen",
+  genre: "Mystery",
+  description: "A cryptic note. A cold case. Your last chance at redemption. Uncover the truth behind a decade-old mystery that forced you into early retirement.",
+  coverImage: "https://images.unsplash.com/photo-1509731987499-fd9bba3a46cc",
+  rating: 4.8,
+  readTime: "25 min"
 };
 
 const MOCK_STORIES = [
@@ -21,7 +23,7 @@ const MOCK_STORIES = [
     title: "Dragon's Dawn",
     author: "Richard Storm",
     description: "In a realm where dragons and humans once coexisted in harmony, darkness threatens to destroy everything. As the last dragon rider, you must forge alliances, uncover ancient secrets, and restore balance to a world on the brink of chaos.",
-    coverImage: "https://images.unsplash.com/photo-1500964757637-c85e8a162699", // Updated to a mystical landscape image
+    coverImage: "https://images.unsplash.com/photo-1500964757637-c85e8a162699",
     genre: "Fantasy",
   },
   {
