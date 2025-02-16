@@ -3,7 +3,7 @@ import { FeaturedStory } from "@/components/FeaturedStory";
 import { GenreSection } from "@/components/GenreSection";
 import { InteractiveStory } from "@/components/InteractiveStory";
 import { useToast } from "@/components/ui/use-toast";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 // Mock data - limited to 10 stories total
 const FEATURED_STORY = {
@@ -108,9 +108,19 @@ const Index = () => {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [selectedStoryId, setSelectedStoryId] = useState<number | null>(null);
   const [scrollY, setScrollY] = useState(0);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      // Add a small rotation based on scroll position
+      document.documentElement.style.setProperty('--page-rotation', `${Math.sin(window.scrollY * 0.001) * 2}deg`);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -128,17 +138,32 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-[#1a1128] to-[#2A1F3C] overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-black via-[#1a1128] to-[#2A1F3C] overflow-hidden perspective-1000">
+      {/* Progress bar that floats */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-[#9b87f5] origin-left z-50 floating-text"
+        style={{ scaleX }}
+      />
+
+      {/* Animated background particles */}
       <div className="fixed inset-0 pointer-events-none">
         {[...Array(50)].map((_, i) => (
-          <div
+          <motion.div
             key={i}
-            className="absolute h-2 w-2 rounded-full bg-[#9b87f5]/20 animate-pulse"
+            className="absolute h-2 w-2 rounded-full bg-[#9b87f5]/20"
+            animate={{
+              y: [0, -20, 0],
+              x: [0, Math.sin(i) * 10, 0],
+              rotate: [0, 360, 0],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              delay: i * 0.1,
+            }}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              transform: `scale(${Math.random() * 2})`,
             }}
           />
         ))}
@@ -146,39 +171,39 @@ const Index = () => {
 
       <div className="relative container py-8">
         <motion.header 
-          className="mb-12 text-center relative z-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 text-center relative z-10 floating-text-slow"
+          initial={{ opacity: 0, y: 100, rotate: 5 }}
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
           transition={{ duration: 0.8 }}
         >
           <h1 className="text-6xl font-bold bg-gradient-to-r from-[#9b87f5] via-[#a587f5] to-[#7E69AB] bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(155,135,245,0.5)] transform hover:scale-105 transition-transform duration-300">
             Discover Amazing Stories
           </h1>
-          <p className="mt-6 text-xl text-[#9b87f5]/80 font-light">
+          <motion.p 
+            className="mt-6 text-xl text-[#9b87f5]/80 font-light floating-text"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
             Explore worlds of imagination and adventure
-          </p>
-          
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-30">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#9b87f5]/20 via-transparent to-[#7E69AB]/20 blur-3xl" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#9b87f5]/30 rounded-full blur-3xl animate-pulse" />
-          </div>
+          </motion.p>
         </motion.header>
 
         <motion.div
-          className="relative"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative page-transition"
+          style={{
+            rotate: 'var(--page-rotation, 0deg)',
+            transition: 'rotate 0.3s ease-out',
+          }}
         >
           <FeaturedStory
             {...FEATURED_STORY}
             onClick={() => handleStoryClick(FEATURED_STORY.id)}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1128] opacity-50 pointer-events-none" />
         </motion.div>
 
         <motion.div 
-          className="my-12 flex gap-4 overflow-x-auto pb-4 justify-center mask-horizontal-fade"
+          className="my-12 flex gap-4 overflow-x-auto pb-4 justify-center mask-horizontal-fade floating-text"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -195,9 +220,9 @@ const Index = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -5, rotate: [-1, 1] }}
             >
               <span className="relative z-10">{genre}</span>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#9b87f5]/20 to-[#7E69AB]/20 blur opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             </motion.button>
           ))}
         </motion.div>
@@ -205,9 +230,14 @@ const Index = () => {
         {GENRES.map((genre, index) => (
           <motion.div
             key={genre}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="page-transition"
+            initial={{ opacity: 0, y: 100, rotate: 5 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
             transition={{ duration: 0.8, delay: 0.2 + index * 0.1 }}
+            style={{
+              rotate: 'var(--page-rotation, 0deg)',
+              transition: 'rotate 0.3s ease-out',
+            }}
           >
             <GenreSection
               title={genre}
@@ -217,24 +247,43 @@ const Index = () => {
           </motion.div>
         ))}
 
-        <div 
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
-          style={{
-            transform: `translateY(${scrollY * 0.2}px)`,
-          }}
-        >
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-[#9b87f5]/10 to-transparent rounded-full blur-3xl" />
-          <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-l from-[#7E69AB]/10 to-transparent rounded-full blur-3xl" />
+        {/* Decorative floating elements */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+          <motion.div
+            className="absolute w-64 h-64 bg-gradient-to-r from-[#9b87f5]/10 to-transparent rounded-full blur-3xl"
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 20, 0],
+              rotate: [0, 180, 360],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              top: '25%',
+              left: '25%',
+            }}
+          />
+          <motion.div
+            className="absolute w-48 h-48 bg-gradient-to-l from-[#7E69AB]/10 to-transparent rounded-full blur-3xl"
+            animate={{
+              y: [0, 30, 0],
+              x: [0, -20, 0],
+              rotate: [360, 180, 0],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              top: '75%',
+              right: '25%',
+            }}
+          />
         </div>
-      </div>
-
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute w-8 h-8 rounded-full bg-gradient-to-r from-[#9b87f5]/20 to-[#7E69AB]/20 blur-lg transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 ease-out" 
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-        />
       </div>
     </div>
   );
